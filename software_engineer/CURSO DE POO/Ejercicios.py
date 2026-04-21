@@ -17,20 +17,20 @@ TAREA:
 
 # Definimos la clase Celular
 class Celular:
-    def __init__(self, nombre, modelo, camara):
-        self.nombre = nombre
+    def __init__(self, marca, modelo, Ram):
+        self.marca = marca
         self.modelo = modelo
-        self.camara = camara
-        
-    def describir(self):
-        print(f"Soy un: {self.nombre} mi modelo es: {self.modelo}, y mi camara es: {self.camara}")
-        
-        
-celular1 = Celular("Xiamomi", "Redmi note 14", "60px")
-celular2 = Celular("Samnsung", "s21fe", "79px")        
-print(celular1.nombre)
+        self.Ram = Ram
 
-celular1.describir()
+    def describir(self):
+        print(f"Soy {self.marca} mi modelo es {self.modelo} y tengo {self.Ram} de ram")
+        
+celular1 = Celular("Samsung", "S21", 8)
+celular2 = Celular("Iphone", "17 Pro Max", 6)
+print(celular1)
+print(celular2)
+celular2.describir()
+
 ### EJERCICIO 2 
 """
 TAREA 2:
@@ -546,15 +546,15 @@ mi_inventario.disparar_todo()
 
 
 
-"""
-TAREA:
-1. Crea una clase 'ProductoHardware'.
-2. Atributos: nombre, __precio (privado), stock.
-3. Usa @property para leer el precio y un @setter para modificarlo, pero 
-   solo si el nuevo precio es mayor a cero.
-4. Crea un método 'vender(cantidad)' que reste al stock solo si hay suficiente.
-5. Crea un @classmethod llamado 'crear_desde_tu_pc' que devuelva un objeto 
-   ya configurado como "Ryzen 5 5600GT, 150000, 10".
+
+#TAREA:
+#1. Crea una clase 'ProductoHardware'.
+#2. Atributos: nombre, __precio (privado), stock.
+#3. Usa @property para leer el precio y un @setter para modificarlo, pero 
+#   solo si el nuevo precio es mayor a cero.
+#4. Crea un método 'vender(cantidad)' que reste al stock solo si hay suficiente.
+#5. Crea un @classmethod llamado 'crear_desde_tu_pc' que devuelva un objeto 
+#   ya configurado como "Ryzen 5 5600GT, 150000, 10".
 
 
 # Tu código aquí...
@@ -579,7 +579,7 @@ class ProductoHardware:
     def crear_desde_tu_pc(cls):
         return cls("Ryzen 5 5600GT", 150000, 10)
 
-"""
+
 #TAREA:
 #1. Crea la clase 'TarjetaSube'.
 #2. Atributos: 'propietario' y '__saldo' (privado).
@@ -625,15 +625,15 @@ mi_sube.cargar_sube(500)
 
 
 
-"""
-TAREA:
-1. Crea la clase padre 'Personaje' con 'nombre' y 'salud'.
-2. En 'Personaje', crea el método 'recibir_daño(cantidad)' que reste salud 
-   y avise si el personaje murió (salud <= 0).
-3. Crea la clase hija 'Leon' que herede de Personaje.
-4. En el __init__ de 'Leon', usá super() para el nombre y salud, 
-   y agregale el atributo 'habilidad'.
-5. Crea un método 'usar_habilidad()' en Leon que imprima un mensaje épico.
+
+#TAREA:
+#1. Crea la clase padre 'Personaje' con 'nombre' y 'salud'.
+#2. En 'Personaje', crea el método 'recibir_daño(cantidad)' que reste salud 
+#   y avise si el personaje murió (salud <= 0).
+#3. Crea la clase hija 'Leon' que herede de Personaje.
+#4. En el __init__ de 'Leon', usá super() para el nombre y salud, 
+#   y agregale el atributo 'habilidad'.
+#5. Crea un método 'usar_habilidad()' en Leon que imprima un mensaje épico.
 
 # --- EXPLICACIÓN: EXTENSIÓN DE CLASES ---
 # Muestra cómo un hijo (Leon) puede tener más funcionalidades que el padre (curar, usar_habilidad).
@@ -671,7 +671,7 @@ prota.curar(30)
 prota.usar_habilidad()
 
 
-"""
+
 #TAREA:
 #1. Crea la clase 'Database'.
 #2. Atributo: '__conectado' (privado, empieza en False).
