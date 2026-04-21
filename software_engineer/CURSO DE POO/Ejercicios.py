@@ -46,38 +46,27 @@ TAREA 2:
 # Sobrescribir (Override) es redefinir un método del padre para que haga algo específico en el hijo.
 
 # Clase base para todos los personajes
-class Personajes:
+class Personaje:
     def __init__(self, nombre, fuerza):
         self.nombre = nombre
-        self.fuerza = fuerza
+        self.fuerza = 200
+        
+class Guerrero(Personaje):
+    def __init__(self, nombre, fuerza, arma):
+        super().__init__(nombre, fuerza)
+        self.arma = arma
+        
+    def atacar(self):
+        print(f"El Guerrero cuyo nombre es {self.nombre} ataca con su {self.arma}")
 
-    # Método especial para representar el objeto como string
-    def __str__(self):
-        return f"Personaje: {self.nombre}, Fuerza: {self.fuerza}"
+pj = Personaje("Benja", 200)
+print(pj)
+arma2 = Guerrero("Asta", 200, "espada")
+print(arma2)
 
+arma2.atacar()
 
-# Clase Guerrero que hereda de Personajes (Herencia)
-class Guerrero(Personajes):
-        # super() llama al constructor de la clase padre
-        def __init__(self, nombre, fuerza, arma):
-            super().__init__(nombre, fuerza)
-        # Atributo específico de Guerrero
-            self.arma = arma
-
-        def atacar(self):
-            print(f"{self.nombre} ataca con su {self.arma}")
-
-
-# Crear personaje normal
-dafne = Personajes("dafne", 20)
-print(dafne)
-# Crear guerrero
-guerrero = Guerrero("Asta", 300, "espada")
-print(guerrero)
-
-# Usar método atacar
-guerrero.atacar()
-"""
+""" 
 TAREA 3 :
 1. Crea una clase 'CuentaBancaria'.
 2. El atributo 'saldo' debe ser privado (__saldo).
