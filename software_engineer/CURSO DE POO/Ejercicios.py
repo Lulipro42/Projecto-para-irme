@@ -698,3 +698,64 @@ db.ejecutar_consulta("SELECT * FROM productos")
 db.concectar()
 db.ejecutar_consulta("SELECT * FROM productos")
 db.concectar()
+
+
+
+"""
+TAREA: SIMULADOR DE WEB SCRAPER 🕷️
+
+1. Crea una clase 'Producto' que reciba 'nombre', 'url' y 'precio_objetivo'.
+2. Crea una clase 'Scraper' que tenga un método 'obtener_precio(url)':
+   - Debe usar un bloque try/except.
+   - Dentro del try, debe "simular" que se conecta (imprimí: "Conectando a [url]...").
+   - Si la URL no empieza con "https", lanza un ValueError("URL no segura").
+3. Implementa el método 'chequear_oferta(producto, precio_actual)':
+   - Si el 'precio_actual' es menor o igual al 'precio_objetivo', imprime: "¡OFERTA! Comprar [nombre]".
+   - Si no, imprime: "Sigue caro, toca esperar".
+"""
+
+class Pedido:
+    def __init__(self, plato, mesa, temperatura_coccion):
+        self.plato = plato
+        self.mesa = mesa
+        self.temperatura_coccion = temperatura_coccion
+        
+class ChefRobot:
+    def preparar(self, pedido):
+        try:
+            print(f"\n--- Recibiendo orden: {pedido.plato} ---")
+            
+            # Agregamos 'pedido.' antes de cada variable
+            if pedido.temperatura_coccion < 60:
+                raise ValueError("Riesgo sanitario: temperatura baja")
+            
+            if pedido.mesa == 0:
+                raise Exception("Error de la sala: Mesa no asignada")
+            
+            print(f"👨‍🍳 Robot: {pedido.plato} en proceso de cocción.")
+            return True
+            
+        # El try SIEMPRE necesita su except
+        except ValueError as e:
+            print(f"❌ ALERTA: {e}")
+            return False
+        except Exception as e:
+            print(f"❌ ERROR: {e}")
+            return False
+
+class Cajero:
+    def generar_ticket(self, pedido, precio):
+        # Calculamos el 10% (multiplicar por 1.10)
+        total = precio * 1.10
+        print(f"--- TICKET MESA {pedido.mesa} ---")
+        print(f"Producto: {pedido.plato}")
+        print(f"Total con servicio (10%): ${total}")
+        print("--------------------------")
+
+# --- PRUEBA RAPIDA ---
+pizza = Pedido("Pizza Especial", 5, 200)
+robot = ChefRobot()
+caja = Cajero()
+
+if robot.preparar(pizza):
+    caja.generar_ticket(pizza, 10000)
