@@ -960,3 +960,60 @@ netflix.recomendar_por_genero("Acción")
 
 # Paso E: El crítico analiza todo lo que se subió con éxito
 ulises_critico.evaluar_calidad(netflix.catalogo)
+
+
+
+
+
+
+
+
+
+# 1. Pedimos datos al usuario
+problema = input("¿Qué problema tiene el usuario?: ")
+prioridad = input("¿Es prioridad Alta, Media o Baja?: ")
+
+# 2. Guardamos los datos en el archivo
+# Usamos "a" (append) para que los tickets se vayan acumulando uno abajo del otro
+with open("registro_tickets.txt", "a", encoding="utf-8") as archivo:
+    archivo.write(f"TICKET: {problema} | PRIORIDAD: {prioridad}\n")
+
+print("\n--- ✅ TICKET GUARDADO ---")
+
+# 3. AHORA: Vamos a leer el archivo para contar cuántos tickets tenemos
+with open("registro_tickets.txt", "r", encoding="utf-8") as lectura:
+    todas_las_lineas = lectura.readlines() # Esto mete cada línea en una lista
+    cantidad = len(todas_las_lineas) # Contamos cuántos elementos tiene la lista
+
+print(f"En total tenés {cantidad} tickets registrados en el sistema.")
+###
+
+
+with open("asistencia_voley.txt", "r", encoding="utf-8") as lectura:
+    for linea in lectura:
+        
+        linea = linea.strip()
+        
+        if "Ulises" in linea:
+            print("El capitan esta abordo") 
+        else:
+            print(f"Jugador registrado: {linea}")
+            
+
+# 1. CREAR EL MENSAJE (Esto ya lo tenías bien)
+with open("mensaje.txt", "w", encoding="utf-8") as frase:
+    frase.write("El mensaje que dejo es que me voy a pasar dark souls pro sigma")
+
+# 2. LEER Y REEMPLAZAR
+with open("mensaje.txt", "r", encoding="utf-8") as archivo:
+    contenido = archivo.read() # Metemos el texto en el 'balde' (variable)
+    
+    # Reemplazamos "sigma" por asteriscos
+    # (El replace siempre pide: "lo que está", "lo nuevo")
+    contenido_censurado = contenido.replace("sigma", "*****")
+
+# 3. GUARDAR EL RESULTADO
+with open("mensaje_limpio.txt", "w", encoding="utf-8") as nuevo_archivo:
+    nuevo_archivo.write(contenido_censurado)
+
+print("✅ El archivo ha sido censurado. ¡Chau 'sigma'!")

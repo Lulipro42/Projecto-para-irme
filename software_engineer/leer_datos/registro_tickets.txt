@@ -1,0 +1,11 @@
+TICKET: no tengo nada | PRIORIDAD: baja
+TICKET: sigma | PRIORIDAD: alta
+TICKET: hla | PRIORIDAD: ga
+TICKET: da | PRIORIDAD: da
+TICKET: nada | PRIORIDAD: nda
+TICKET: nda por ahora | PRIORIDAD: baja
+TICKET: nada | PRIORIDAD: nada
+TICKET: nda | PRIORIDAD: nda
+TICKET: das | PRIORIDAD: a
+TICKET: 211 | PRIORIDAD: 21
+TICKET: nada13w | PRIORIDAD: 121
