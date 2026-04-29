@@ -177,20 +177,6 @@ user1 = Usuario("Dafne", "river2026")
 user1.intentar_login()
 
 """
-TAREA: SISTEMA DE RESERVA DE TURNOS
-
-1. Crea una clase 'Entrenamiento' que reciba 'deporte' y 'cupo_maximo'.
-2. Define atributos internos:
-   - 'self.inscriptos' (debe ser una lista vacía para guardar los nombres).
-3. Implementa el método 'inscribir_persona(nombre_persona)':
-   - PRIMERO: Si el largo de la lista 'self.inscriptos' es igual o mayor al 'self.cupo_maximo',
-     imprimir: "Cupo lleno para {self.deporte}. {nombre_persona} queda en espera."
-   - SEGUNDO: Si hay lugar, agregar el nombre a la lista y decir: "{nombre_persona} inscripto con éxito".
-4. Implementa el método 'mostrar_lista()':
-   - Debe imprimir todos los nombres que están anotados hasta el momento.
-5. EXTRA: Agregá un método 'cancelar_reserva(nombre_persona)' que busque el nombre en la lista y lo saque.
-"""
-"""
 TAREA: SISTEMA DE RESERVA DE TURNOS (REVISADO)
 
 1. Crea una clase 'Entrenamiento' que reciba 'deporte' y 'cupo_maximo'.
@@ -398,3 +384,180 @@ caja = Cajero()
 
 if robot.preparar(pizza):
     caja.generar_ticket(pizza, 10000)
+    
+    
+
+# Definimos la estructura de un gasto individual
+class Gasto:
+    def __init__(self, concepto, monto, categoria):
+        # Guardamos los datos que nos pasan en 'atributos' del objeto
+        self.concepto = concepto
+        self.monto = monto
+        self.categoria = categoria
+
+# Definimos quién va a guardar y procesar esos gastos
+class Billetera:
+    def __init__(self):
+        # Creamos una lista vacía que será nuestra 'base de datos' temporal
+        self.historial = []
+        
+    def registrar_gasto(self, gasto):
+        """Recibe un objeto de tipo Gasto y lo guarda si es válido."""
+        try:
+            # Validamos que el dinero sea un número positivo
+            if gasto.monto <= 0:
+                # Si es 0 o menos, lanzamos el error manualmente
+                raise ValueError("Monto inválido: debe ser mayor a 0")
+            
+            # .append es el comando para 'meter' el objeto adentro de la lista
+            self.historial.append(gasto)
+            print(f"✅ Registrado con éxito: {gasto.concepto}")
+            
+        except ValueError as e:
+            # Si saltó el raise de arriba, se ejecuta este bloque
+            print(f"❌ Error al registrar: {e}")
+
+    def total_por_categoria(self, categoria_buscada):
+        """Suma todos los montos de una categoría específica."""
+        total = 0  # El acumulador empieza en 0
+        
+        print(f"\n--- Analizando categoría: {categoria_buscada} ---")
+        
+        # Recorremos la lista de objetos uno por uno
+        for g in self.historial:
+            # 'g' es el objeto Gasto actual en la vuelta del bucle
+            if g.categoria == categoria_buscada:
+                # Si la categoría coincide, sumamos su monto al total
+                total += g.monto 
+                print(f"Item: {g.concepto} | Valor: ${g.monto}")
+        
+        # Devolvemos el resultado final para que otra clase lo use
+        return total
+
+# Definimos quién analiza si estamos gastando de más
+class Analizador:
+    def comprobar_salud(self, total, limite):
+        """Compara el total gastado contra un límite presupuesto."""
+        if total > limite:
+            # Calculamos la diferencia para dar una mejor respuesta
+            sobrante = total - limite
+            print(f"⚠️ ALERTA: Gastaste ${total}. Te pasaste por ${sobrante} del límite.")
+        else:
+            print(f"✅ Todo bajo control. Te quedan ${limite - total} de presupuesto.")
+
+# --- ZONA DE PRUEBAS (Donde el código cobra vida) ---
+
+# 1. Instanciamos las clases principales
+mi_billetera = Billetera()
+mi_analizador = Analizador()
+
+# 2. Creamos los 'objetos' de datos
+g1 = Gasto("Cena con amigos", 5000, "Comida")
+g2 = Gasto("Entrada Cine", 3000, "Ocio")
+g3 = Gasto("Compra Supermercado", 8000, "Comida")
+
+# 3. Usamos la billetera para guardar esos objetos
+mi_billetera.registrar_gasto(g1)
+mi_billetera.registrar_gasto(g2)
+mi_billetera.registrar_gasto(g3)
+
+# 4. Procesamos los datos: Pedimos el total de 'Comida'
+# Guardamos ese resultado (un número) en una variable
+gasto_comida = mi_billetera.total_por_categoria("Comida")
+
+# 5. Pasamos ese número al analizador para que tome una decisión
+mi_analizador.comprobar_salud(gasto_comida, 10000)
+
+
+
+
+
+"""
+EJERCICIO: STREAMING APP 📺 (RUBRO ENTERTAINMENT)
+------------------------------------------------
+1. Clase 'Contenido': 
+   - Debe recibir 'titulo', 'genero' (ej: "Acción") y 'puntuacion' (ej: 9).
+
+2. Clase 'Plataforma':
+   - Debe tener una lista llamada 'catalogo' vacía.
+   - Método 'subir_contenido(contenido)':
+     - Usa try/except.
+     - Si la 'puntuacion' es menor a 1 o mayor a 10, lanza ValueError("Puntuación fuera de rango").
+     - Si está ok, agrega el objeto 'contenido' a la lista 'catalogo' e imprime éxito.
+   - Método 'recomendar_por_genero(genero_buscado)':
+     - Debe recorrer la lista 'catalogo' con un bucle for.
+     - Si el género del contenido coincide con el buscado, imprime el título.
+
+3. Clase 'Critico':
+   - Método 'evaluar_calidad(lista_contenidos)':
+     - Debe recorrer la lista que recibe.
+     - Si la puntuación es >= 8, imprime: "[titulo] es una Joya 💎".
+     - Si no, imprime: "[titulo] es Regular 🍿".
+"""
+
+class Contenido:
+    def __init__(self, titulo, genero, puntuacion):
+        self.titulo = titulo
+        self.genero = genero
+        self.puntuacion = puntuacion
+
+# 2. La Plataforma gestiona el catálogo (Nuestra "Base de Datos")
+class Plataforma:
+    def __init__(self):
+        # La lista empieza vacía cada vez que creamos una plataforma nueva
+        self.catalogo = []
+        
+    def subir_contenido(self, contenido):
+        try:
+            # Validamos el rango (usamos 'or' porque no puede ser las dos a la vez)
+            if contenido.puntuacion < 1 or contenido.puntuacion > 10:
+                raise ValueError(f"Puntuación {contenido.puntuacion} fuera de rango (1-10)")
+            
+            # Si pasó el IF, lo guardamos físicamente en la lista
+            self.catalogo.append(contenido)
+            print(f"✅ Subido: {contenido.titulo}")
+            
+        except ValueError as e:
+            # Atrapamos el error para que el programa no se cierre
+            print(f"❌ ERROR en {contenido.titulo}: {e}")
+
+    def recomendar_por_genero(self, genero_buscado):
+        print(f"\n--- 🎬 Recomendaciones de {genero_buscado} ---")
+        encontrado = False
+        # Recorremos objeto por objeto dentro de la lista
+        for c in self.catalogo:
+            if c.genero == genero_buscado:
+                print(f"-> {c.titulo} (Puntaje: {c.puntuacion})")
+                encontrado = True
+        
+        if not encontrado:
+            print("No hay contenido disponible para este género.")
+
+# 3. El Crítico analiza la calidad (Procesamiento de datos)
+class Critico:
+    def evaluar_calidad(self, lista_contenidos):
+        """Recibe una lista de objetos y los clasifica."""
+        print("\n--- 🕵️ INFORME DEL CRÍTICO ---")
+        # 'peli' es el nombre temporal que le damos a cada objeto en el bucle
+        for peli in lista_contenidos:
+            if peli.puntuacion >= 8:
+                print(f"💎 {peli.titulo}: Es una JOYA.")
+            else:
+                print(f"🍿 {peli.titulo}: Es REGULAR.")
+
+netflix = Plataforma()
+ulises_critico = Critico()
+
+peli1 = Contenido("Batman", "Acción", 9)
+peli2 = Contenido("Titanic", "Drama", 7)
+peli3 = Contenido("Inception", "Acción", 10)
+peli4 = Contenido("Peli Trucha", "Comedia", 15)
+
+netflix.subir_contenido(peli1)
+netflix.subir_contenido(peli2)
+netflix.subir_contenido(peli3)
+netflix.subir_contenido(peli4) 
+
+netflix.recomendar_por_genero("Acción")
+
+ulises_critico.evaluar_calidad(netflix.catalogo)
