@@ -79,14 +79,14 @@ OBJETIVO: Crear un sistema de registro de progreso diario.
 5. Imprimir en consola: "✅ Registro guardado en el diario".
 """
 
-username = input("Porfavor escriba su nombre:")
-aprendisaje = input("Porfavor di que aprendiste hoy:")
+username = input("Porfavor escribe tu nombre:")
+aprendido = input("Porfavor di lo que aprendiste hoy:")
 
 with open("diario.txt", "a", encoding="utf-8") as diario:
-    diario.write(f"Nombre:{username} | Aprendisaje: {aprendisaje}")
-
-print("\n --- REGISTRO GUARDADO EN EL DIARIO ---")
-
+    diario.write(f"Nombre: {username} | Aprendisaje: {aprendido}")
+    print("\n--- Diario actualizado ---")
+    
+    
 """
 NIVEL 2: FILTRADO DE ASISTENCIA 🏐 (RUBRO DEPORTES)
 -------------------------------------------------
@@ -100,14 +100,13 @@ OBJETIVO: Leer una lista y filtrar datos específicos.
 """
 with open("asistencia_voley.txt", "r", encoding="utf-8") as lectura:
     for linea in lectura:
+        
         linea = linea.strip()
+        
         if "Ulises" in linea:
-            print("El capitan esta abordo") 
+            print("El capitan esta a bordo")
         else:
-            print(f"Jugador registrado: {linea}")
-            
-
-
+            print(f"Jugador registrado {linea}")
 """
 NIVEL 3: EL PROCESADOR DE DATOS ⚙️ (DATA ENGINEERING)
 ----------------------------------------------------

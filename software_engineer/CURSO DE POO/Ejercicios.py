@@ -1016,4 +1016,26 @@ with open("mensaje.txt", "r", encoding="utf-8") as archivo:
 with open("mensaje_limpio.txt", "w", encoding="utf-8") as nuevo_archivo:
     nuevo_archivo.write(contenido_censurado)
 
-print("✅ El archivo ha sido censurado. ¡Chau 'sigma'!")
+"""
+NIVEL 7: EL DETECTOR DE CRACKS 🏆
+-------------------------------
+OBJETIVO: Leer 'voley_data.csv' y mostrar solo a los que tienen más de 90 puntos.
+
+1. Abrir 'voley_data.csv' en modo lectura ("r").
+2. Usar 'lector = csv.reader(archivo)'.
+3. Usar 'next(lector)' para saltar los encabezados.
+4. En el bucle 'for fila in lector:', convertir los puntos a entero: 'puntos = int(fila[2])'.
+5. Si puntos > 90, imprimir: "Crack detectado: [fila[0]]".
+"""
+
+"""
+NIVEL 8: EL ACTUALIZADOR DE POSICIONES 🔄
+-----------------------------------------
+OBJETIVO: Crear un nuevo archivo cambiando una posición.
+
+1. Crear una lista vacía llamada 'datos_actualizados'.
+2. Leer el archivo original.
+3. En el for, si 'fila[1]' es igual a "Punta", cambiarlo a "Capitán".
+4. Guardar cada fila (modificada o no) en la lista 'datos_actualizados' usando .append(fila).
+5. Al final, abrir un archivo NUEVO 'voley_final.csv' en modo escritura ("w") y usar .writerows(datos_actualizados).
+"""
