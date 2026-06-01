@@ -30,9 +30,6 @@ def index(request):
     
     hoy = timezone.now().date()
     tareas_vencidas = Task.objects.filter(due_data__lt=hoy, done=False).count()
-    # Script temporal para crear tu usuario en producción
-    if not User.objects.filter(username='tu_usuario_aca').exists():
-        User.objects.create_superuser('tu_usuario_aca', 'tu_email@example.com', 'tu_contraseña_segura_aca')
     
     return render(request, 'project/index.html', { # Cambiá 'home.html' por el nombre de tu plantilla de inicio si es distinto
         'total_proyectos': total_proyectos,
