@@ -1,0 +1,71 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div style="max-width: 2200px; background-color: #8b8e91; border-radius: 15px; margin: 0 auto; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    
+    <h1 style="color: #fbff00; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 30px;">
+        📂 Mis Proyectos Activos
+    </h1>
+
+    <form method="GET" style="margin-bottom: 30px; display: flex; gap: 10px; align-items: center;">
+        <input type="text" name="search" placeholder="🔍 Buscar proyecto por nombre..." style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+        
+        <button type="submit" style="background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; height: 38px;">
+            Buscar
+        </button>
+
+        <a href="{% url 'create_project' %}" style="background-color: #28a745; color: white; padding: 0 20px; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; height: 38px; white-space: nowrap;">
+            ➕ Nuevo Proyecto
+        </a>
+    </form>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+        {% for project in projects %}
+            <article style="background: #ffffff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s;">
+                
+                <div>
+                    <h2 style="margin: 0 0 10px 0; color: #2c3e50; font-size: 1.5rem;">
+                        {{ project.name }}
+                    </h2>
+                    
+                    <p style="margin: 0 0 20px 0; color: #666; font-size: 0.95rem;">
+                        <span style="background: #e9ecef; padding: 4px 8px; border-radius: 15px; font-weight: bold; color: #495057;">
+                            📊 Tareas: {{ project.task_set.all.count }}
+                        </span>
+                    </p>
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                            <span style="font-size: 0.85rem; font-weight: 600; color: #495057;">Progreso</span>
+                            <span style="font-size: 0.85rem; font-weight: bold; color: #007bff;">{{ project.progreso }}%</span>
+                        </div>
+                        <div style="background-color: #e9ecef; border-radius: 10px; height: 8px; width: 100%; overflow: hidden;">
+                            <div style="background-color: #007bff; height: 100%; width: {{ project.progreso }}%; transition: width 0.4s ease;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f3f5; padding-top: 15px; margin-top: 15px;">
+                    
+                    <a href="{% url 'project_detail' project.id %}" style="color: #007bff; text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+                        👁️ Ver detalles
+                    </a>
+
+                    <a href="{% url 'update_project' project.id %}" style="background: #f8f9fa; border: 1px solid #ced4da; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; color: #495057; text-decoration: none; font-weight: 600;">
+                        ⚙️ Update
+                    </a>
+
+                    <a href="{% url 'project_eliminar' project.id %}" style="color: #dc3545; text-decoration: none; font-weight: bold; font-size: 0.9rem;">
+                        🗑️ Borrar
+                    </a>
+                    
+                </div>
+            </article>
+        {% empty %}
+            <p style="color: #ffffff; grid-column: 1 / -1; text-align: center; font-size: 1.1rem; font-weight: bold;">
+                No hay proyectos creados todavía. ¡Empezá creando uno! 🚀
+            </p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
