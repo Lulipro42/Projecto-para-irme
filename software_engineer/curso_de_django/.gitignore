@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Ignorar la base de datos local (SQLite) para que no viaje a internet
 db.sqlite3
 
@@ -11,7 +10,6 @@ __pycache__/
 
 # Ignorar archivos de variables de entorno locales (donde van las contraseñas)
 .env
-=======
 # Python-generated files
 __pycache__/
 *.py[oc]
@@ -22,4 +20,3 @@ wheels/
 
 # Virtual environments
 .venv
->>>>>>> dff488e8a6fb3710c0bb64ecfbd9d51cdd1d4e98
