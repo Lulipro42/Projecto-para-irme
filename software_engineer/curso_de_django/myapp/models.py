@@ -1,9 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from base.models import BaseModel
 
 # Create your models here.
-class Project(models.Model):
+
+
+
+
+class Project(BaseModel):
     name = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True) #(Le ponemos null=True y blank=True para que los proyectos que ya tenías creados de antes no te rompan la base de datos al migrar).
     
@@ -11,7 +15,7 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
-class Tag(models.Model):
+class Tag(BaseModel):
     name = models.CharField(max_length=50, unique=True)
     color = models.CharField(max_length=7, default='#6c757d')
 
@@ -19,11 +23,10 @@ class Tag(models.Model):
         return self.name
 
 
-class Task(models.Model):
+class Task(BaseModel):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    done = models.BooleanField(default=False)
-    priority = models.CharField(max_length=10, default='Baja')
+    done = models.BooleanField(default=True)
     tags = models.ManyToManyField(Tag, blank=True, related_name='tasks') # EL BLANK SIRVE PAR QUE UNA TAREA SE CREE SIN NINGUNA ETIQUTA PUESTA LA PRINCIPIO
     due_data = models.DateField(null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True) #  ¡Ahora sí sabe que apunta a User!
@@ -66,16 +69,15 @@ class Task(models.Model):
     
 
 
-class TaskNote(models.Model):
+class TaskNote(BaseModel):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='notes')    
     text = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return f"Nota para {self.task.title}: {self.text[:20]}..."
 
 
-class SubTask(models.Model):
+class SubTask(BaseModel):
     task = models.ForeignKey(
         Task,
         on_delete=models.CASCADE,

@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.contrib import admin
-from . import views
+from . import views, api
 from rest_framework import routers
 
 router = routers.DefaultRouter()
@@ -17,9 +17,6 @@ urlpatterns = [
     path('create_project/', views.create_project, name="create_project"),
     path('project/<int:id>/', views.project_detail, name="project_detail"),
     path('project_eliminar/<int:id>/', views.project_eliminar, name='project_eliminar'),
-    path('update_task/<int:id>/', views.upadate_task, name='update_task'),
-    path('task_completar/<int:id>/', views.task_completar, name="task_completar"),
-    path('task_eliminar/<int:id>/', views.task_eliminar, name="task_eliminar"), 
     path('project/<int:id>/create_task/', views.recibir_id, name='recibir_id'),
     path('project_update/<int:id>/', views.update_project, name="update_project"),
     path('task/<int:task_id>/complete/', views.complete_task, name="complete_task"),
@@ -32,5 +29,11 @@ urlpatterns = [
     path('task/actualizar-estado/<int:task_id>/', views.actualizar_estado_kanban, name="actualizar_estado_kaban"),
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    # 🔌 NUEVAS RUTAS DE LA API:
+    # Para listar y crear (No reciben ID)
+    path('api/tasks/', api.TaskListAPIView.as_view(), name='api_task_list'),
+    
+    # Para ver, editar y borrar una específica (Piden el ID por la URL como 'pk')
+    path('api/tasks/<int:pk>/', api.TaskDetailAPIView.as_view(), name='api_task_detail'),
 
 ]

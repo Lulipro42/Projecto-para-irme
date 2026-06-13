@@ -1,0 +1,41 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Iniciar Sesión {% endblock %}
+
+{% block content %}
+<div style="max-width: 450px; margin: 60px auto; padding: 0 20px; font-family: sans-serif;">
+    
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: center;">
+        
+        <h2 style="color: #2c3e50; margin-top: 0; margin-bottom: 8px;">👋 ¡Hola de nuevo!</h2>
+        <p style="color: #718096; font-size: 0.95rem; margin-bottom: 25px;">Ingresá tus credenciales para gestionar tus proyectos.</p>
+
+        {% if error %}
+            <div style="background: #fff5f5; color: #e53e3e; border: 1px solid #fed7d7; padding: 12px; border-radius: 8px; font-size: 0.9rem; font-weight: bold; margin-bottom: 20px; text-align: left;">
+                ❌ {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div style="margin-bottom: 18px; text-align: left;">
+                <label style="display: block; font-size: 0.9rem; font-weight: bold; margin-bottom: 6px; color: #4a5568;">👤 Nombre de usuario:</label>
+                <input type="text" name="username" placeholder="Ej: admin" required 
+                       style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem;">
+            </div>
+            
+            <div style="margin-bottom: 25px; text-align: left;">
+                <label style="display: block; font-size: 0.9rem; font-weight: bold; margin-bottom: 6px; color: #4a5568;">🔑 Contraseña:</label>
+                <input type="password" name="password" placeholder="••••••••" required 
+                       style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem;">
+            </div>
+            
+            <button type="submit" style="background-color: #007bff; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1rem; transition: background 0.2s;" onmouseover="this.style.background='#0056b3'" onmouseout="this.style.background='#007bff'">
+                Ingresar al Sistema
+            </button>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,47 +1,62 @@
-from django.http import HttpResponse
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from rest_framework import viewsets
 from .serializers import TaskSerializer
+from django.core.exceptions import ValidationError
 from .models import Project, Task, TaskNote, Tag
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CreateNewTask, CreateNewProject
 from django.utils import timezone
-from django.db.models import Count, Case, Value, When
+from django.db.models import Count, Case, Value, When, Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
 
+
 # Create your views here.
 def index(request):
-    total_proyectos = Project.objects.count()
+    total_proyectos = Project.objects.filter(state=True).count() # 👁️ Solo proyectos activos
 
-    tareas_completadas = Task.objects.filter(status='completada').count()
-    tareas_pendientes = Task.objects.filter(status='pendiente').count()
-    tareas_en_progreso = Task.objects.filter(status='progreso').count()
+    # 1. Traemos solo las tareas activas optimizadas de la base de datos
+    tareas_activas = Task.objects.filter(state=True).select_related('project', 'user', 'assigned_to')
     
-    lista_pendientes = Task.objects.filter(status='pendiente').select_related('project', 'user', 'assigned_to')
-    lista_progreso = Task.objects.filter(status='progreso').select_related('project', 'user', 'assigned_to') # 🔄 Nueva lista
-    lista_completadas = Task.objects.filter(status='completada').select_related('project', 'user', 'assigned_to')
+    # 2. Inicializamos listas vacías puras de Python para usar .append()
+    # normalmente cuando queremos buscar algo con filter afecta a todo el QuerySet
+    conteos = Task.objects.filter(state=True).aggregate(
+        tot_pendientes=Count('id',filter=Q(status='pendiente')),
+        tot_progreso=Count('id',filter=Q(status='progreso')),# Y despues Q significa query/consulta y para futuro e permite guardar en 'capsula' para poder meter adentro a funciuones como count
+        tot_completadas=Count('id',filter=Q(status='completada'))
+        
+    )
+    
+    lista_pendientes = Task.objects.filter(status='pendiente').select_related('project','user','assigned_to') # Bueno aca haace lo que hacia anteriormente de state true para que el baseModel ande despues el status es para buscar a la variable o cmo se diga con ese nmombre y el selecet related es para que no ocurrar el problema del N + 1
+    lista_progreso = Task.objects.filter(status='progreso').select_related('project','user','assigned_to')
+    lista_completadas = Task.objects.filter(status='completada').select_related('project','user','assigned_to')
+    
     
 
     
     hoy = timezone.now().date()
-    tareas_vencidas = Task.objects.filter(due_data__lt=hoy, done=False).count()
+    # Contamos solo las vencidas que estén activas (state=True)
+    tareas_vencidas = tareas_activas.filter(due_data__lt=hoy, done=False).count()
     
-    return render(request, 'project/index.html', { # Cambiá 'home.html' por el nombre de tu plantilla de inicio si es distinto
+    # Contamos los totales basados en nuestras listas clasificadas
+    tareas_pendientes = len(lista_pendientes)
+    tareas_en_progreso = len(lista_progreso)
+    tareas_completadas = len(lista_completadas)
+    
+    return render(request, 'project/index.html', {
         'total_proyectos': total_proyectos,
-        'tareas_completadas': tareas_completadas,
-        'tareas_en_progreso':tareas_en_progreso,
-        'tareas_pendientes': tareas_pendientes,
+        'tareas_completadas': conteos['tot_completadas'],
+        'tareas_en_progreso': conteos['tot_progreso'],
+        'tareas_pendientes': conteos['tot_pendientes'],
         'tareas_vencidas': tareas_vencidas,
-        'lista_pendientes':lista_pendientes,
+        'lista_pendientes': lista_pendientes, 
         'lista_completadas': lista_completadas,
         'lista_progreso': lista_progreso
     })
-
 
 
 def hello(request, username):
@@ -62,18 +77,15 @@ def projects(request):
     
     if termino_buscar:
         # 🕵️‍♂️ Busca por nombre, pero filtrando SÓLO los proyectos del usuario actual
-        proyectos = Project.objects.filter(user=request.user, name__icontains=termino_buscar)
+        proyectos = Project.objects.filter(user=request.user, state=True, name__icontains=termino_buscar)
     else:
         # 👤 Si no está buscando nada, trae todos los proyectos del usuario actual
-        proyectos = Project.objects.filter(user=request.user)
+        proyectos = Project.objects.filter(user=request.user,state=True)
 
     # 🛠️ Ruta corregida: 'project/projects.html'
     return render(request, 'project/projects.html', {
         'projects': proyectos
     })
-
-
-
 
 
 def task(request):
@@ -138,19 +150,6 @@ def create_task(request):
     }) 
 
 
-def delete_task(request, task_id):
-    # 1. Buscamos la tarea por su ID o tiramos un 404 si no existe
-    task = get_object_or_404(Task, id=task_id)
-    
-    # 2. Nos guardamos el ID del proyecto antes de borrar la tarea para poder volver
-    project_id = task.project.id
-    
-    # 3. La borramos de la base de datos con el método mágico .delete()
-    task.delete()
-    
-    # 4. Redireccionamos de vuelta al detalle del proyecto usando su ID
-    return redirect('project_detail', id=project_id) # Cambiá 'project_detail' si tu ruta tiene otro name
-
 
 
 def complete_task(request, task_id): # Usamos task_id para que combine con el urls.py
@@ -159,29 +158,19 @@ def complete_task(request, task_id): # Usamos task_id para que combine con el ur
     
     # Tu lógica brillante que invierte el estado:
     task.done = not task.done
-    task.save()
     
+    # 2. 🔥 TU MISIÓN: Escribí acá el bloque IF / ELSE para actualizar task.status
+    # Si task.done es True -> task.status debe ser 'completada'
+    # Si task.done es False -> task.status debe ser 'pendiente'
+    if task.done:
+        task.status = 'completada'
+    else:
+        task.status = 'pendiente'
+
+    task.save()
     # Para volver al detalle del proyecto, necesitamos el ID del proyecto de ESTA tarea.
     # Django te permite viajar a través del modelo: task.project.id
     return redirect('project_detail', id=task.project.id)
-
-
-def task_editar(request, task_id):
-    task =  get_object_or_404(Task, id=task_id)
-
-    if request.method == 'POST':
-        task.title = request.POST.get('title')
-        task.description = request.POST.get('description')
-        task.priority = request.POST.get('priority')
-
-        task.save()
-        return redirect('/task/')
-
-    return render(request, 'task/task_form.html', {
-        'task':task
-    })
-
-
 
 
 
@@ -205,39 +194,38 @@ def create_project(request):
 
 
 
+def task_editar(request, task_id):
+        task = get_object_or_404(Task,id=task_id)
         
-def upadate_task(request, id):
-    # Busca la tarea por ID o devuelve un error 404 si no existe
-    task = get_object_or_404(Task, id=id)
-    
-    # Invierte el estado de la tarea (si estaba False pasa a True y viceversa)
-    task.done = not task.done
-    
-    if task.done:
-        task.status = 'completada'
-    else:
-        task.status = 'pendiente'
-    
-    # Guarda los cambios en la base de datos
-    task.save()
-    # Redirige a la vista de detalles del proyecto al que pertenece la tarea
-    return redirect('project_detail', id=task.project_id)
+        if request.method == 'GET':
+            return render(request, 'task/task_form.html',{
+                'task':task
+            })
+        
+        title =  request.POST.get('title').strip()
+        description =  request.POST.get('description', '')
+        
+        task.title = title
+        task.description = description
+
+        task.save()
+        
+        return redirect('project_detail',id=task.project.id)
 
 
-def task_completar(request, id):
-    tarea = get_object_or_404(Task, id=id)
+def delete_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id, project__user=request.user)
     
-    tarea.done = True
-    tarea.save()
+    # 2. Nos guardamos el ID del proyecto antes de borrar la tarea para poder volver
+    project_id = task.project.id
     
-    return redirect('task')
+    # 3. La borramos de la base de datos con el método mágico .delete()
+    task.delete()
+    
+    # 4. Redireccionamos de vuelta al detalle del proyecto usando su ID
+    return redirect('project_detail', id=project_id) # Cambiá 'project_detail' si tu ruta tiene otro name
 
 
-
-def task_eliminar(request, id):
-    tarea = get_object_or_404(Task, id=id)
-    tarea.delete()
-    return redirect('task') # Te devuelve a la lista de tareas al toque
 
 
 def add_task_note(request,task_id):
@@ -254,11 +242,12 @@ def add_task_note(request,task_id):
     return redirect('projects')
 
 
+@login_required
 def project_detail(request, id):
-    project = get_object_or_404(Project, id=id)
+    project = get_object_or_404(Project, id=id, user=request.user, state=True) # Aca puse el user=request.user para buscar bien al usuario y decime si tendira que haber pusto title__icontains etc porque me parece que no decime si esta bien o no 
     
     # Traemos TODAS las tareas asociadas a este proyecto
-    todas_las_tareas_del_proyecto = project.task_set.all()
+    todas_las_tareas_del_proyecto = project.task_set.filter(state=True)
     
     # 📊 MATEMÁTICA DEL PROYECTO
     tareas_totales = todas_las_tareas_del_proyecto.count()
@@ -305,24 +294,14 @@ def project_detail(request, id):
         'all_users': todos_los_usuarios,
         'porcentaje': porcentaje_progreso, 
     })
-
-def crear_projecto(request):
-    if request.method == 'GET':
-        return render(request, 'create_project.html', {
-            'form': CreateNewProject()
-        })
-    else:
-        form = CreateNewProject(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('projects')
-        
-        
+    
+    
 #   TAREA PARA HACER
 def project_eliminar(request,id):
-    proyecto = get_object_or_404(Project, id=id)
+    proyecto = get_object_or_404(Project,id=id,user=request.user)
     
-    proyecto.delete()    
+    proyecto.state = False #Lo desactivamos
+    proyecto.save() # Guardamos el cambio den la base de datos
     
     return redirect('projects')
 
@@ -330,31 +309,58 @@ def project_eliminar(request,id):
     
     
 def recibir_id(request, id):
-    proyecto = get_object_or_404(Project, id=id)
+    proyecto = get_object_or_404(Project, id=id,user=request.user) #Aca puse eso debido a que me dijiste que verifique al usuario antes de poder buscar una tarea 
     
     if request.method == 'POST':
-        fecha_limite = request.POST.get('due_date')
+        # 1. Capturamos los datos con el blindaje que ya sabés usar
+        title = (request.POST.get('title') or '').strip()
+        description = (request.POST.get('description') or '').strip()
+        priority = request.POST.get('priority', 'Baja')
         
-        nueva_tarea = Task.objects.create(
-            title=request.POST['title'].strip(), 
-            description=request.POST.get('description', ''), 
-            priority=request.POST.get('priority', 'Baja'),    
-            project=proyecto,
-            due_data=fecha_limite if fecha_limite else None   
-        ) 
+        # 2. Procesamos la fecha límite
+        fecha_texto = request.POST.get('due_data') # Captura el string del HTML
+        fecha_limite = None
         
-        # # ACA CORREGIMOS EL ERROR DE TIPEO: pusiste 'requet' y va 'request'
-        etiquetas_seleccionadas = request.POST.getlist('tags')
-        
-        if etiquetas_seleccionadas:
-            nueva_tarea.tags.set(etiquetas_seleccionadas)
-        
-        # # ACA REVISÁ EL NOMBRE DE LA VISTA: Si en tus URLs se llama 'project_detail', lo dejás así.
-        # # Si se llega a romper la redirección, recordá cambiarlo por el nombre exacto que tenga en tu urls.py
+        if fecha_texto:
+            # 💡 Convertimos el texto "2026-06-09" en una fecha real de Python
+            fecha_limite = datetime.strptime(fecha_texto, "%Y-%m-%d").date()
+            hoy = timezone.now().date()
+            
+            # 🔥 TU LÓGICA: Si la fecha ingresada es menor a hoy, frenamos el guardado
+            if fecha_limite < hoy:
+                print("❌ ERROR: La fecha límite no puede ser una fecha pasada.")
+                # Freno de mano: redirige al detalle sin crear la tarea
+                return redirect('project_detail', id=id)
+
+        # 3. Si el título es válido y pasó la fecha, creamos la tarea
+        if title:
+            nueva_tarea = Task.objects.create(
+                title=title,
+                description=description,
+                project=proyecto,          # El objeto proyecto completo
+                user=request.user,         # El usuario logueado
+                priority=priority,
+                status='pendiente',
+                done=False,
+                due_data=fecha_limite      # Guarda la fecha validada o None si vino vacía
+            )
+            
+            # Guardamos las etiquetas si seleccionó alguna
+            etiquetas_seleccionadas = request.POST.getlist('tags')
+            if etiquetas_seleccionadas:
+                nueva_tarea.tags.set(etiquetas_seleccionadas)
+                
+            print(f"¡Tarea '{title}' creada con éxito desde el detalle!")
+        else:
+            print("❌ ERROR: El título no puede estar vacío.")
+
         return redirect('project_detail', id=id)
+    
+    return redirect('project_detail', id=id)
+
 # UPDATE
 def update_project(request, id):
-    proyecto = get_object_or_404(Project,id=id)
+    proyecto = get_object_or_404(Project,id=id,user=request)
     
     
     if request.method == 'POST':
@@ -371,7 +377,8 @@ def update_project(request, id):
 # ZONA DE ETIQUETAS EN LA PAGINA 
 def create_tag(request, project_id):
     if request.method == 'POST':
-        nombre = request.POST.get('name').strip()
+        # Aplicamos la regla del fallback (or '') para que nunca más falle con .strip()
+        nombre = (request.POST.get('name')or '').strip()
         color_hex = request.POST.get('color','#007bff')
         
         if nombre:
@@ -434,14 +441,19 @@ def actualizar_estado_kanban(request, task_id):
             # Buscamos la tarea por su ID
             tarea = Task.objects.get(id=task_id)
             
+            if tarea.status == nuevo_estado:
+                return JsonResponse({'success': True})
+            
             # 🔄 Guardamos el string exacto en el nuevo campo del modelo
             if nuevo_estado in ['pendiente', 'progreso', 'completada']:
                 tarea.status = nuevo_estado
+                
+            
             
             # 🔄 TRADUCCIÓN: Convertimos el string del Kanban al booleano 'done' de tu modelo
             if nuevo_estado == 'completada':
                 tarea.done = True
-            elif nuevo_estado == 'pendiente':
+            elif nuevo_estado == 'pendiente' or nuevo_estado == 'progreso':
                 tarea.done = False
                 
             tarea.save() # Ahora sí impacta una columna real en SQLite y se guarda de verdad
@@ -459,5 +471,11 @@ def actualizar_estado_kanban(request, task_id):
 
 # Esta clase maneja todo el CRUD (Crear, Leer, Actualizar, Borrar) automáticamente
 class TaskViewSet(viewsets.ModelViewSet):
-    queryset = Task.objects.all()
+    queryset = Task.objects.all().select_related('user','project','assigned_to') # Como "objects" ya filtra state=True, parecería que está bien... 
     serializer_class = TaskSerializer
+    
+    def perform_destroy(self, instance):
+        instance.state = False
+        instance.save()        
+    
+# TICKECTS

@@ -189,7 +189,7 @@
                 </div>
 
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <a href="{% url 'task_completar' task.id %}" style="text-decoration: none;">
+                    <a href="{% url 'complete_task' task.id %}" style="text-decoration: none;">
                         <button style="cursor: pointer; background-color: #4CAF50; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold;">
                             ✅ Marcar como hecha
                         </button>
@@ -199,7 +199,7 @@
                             ✏️ Editar
                         </button>
                     </a>
-                    <a href="{% url 'task_eliminar' task.id %}" onclick="return confirm('¿Seguro que querés borrar esta tarea?')" style="text-decoration: none;">
+                    <a href="{% url 'delete_task' task.id %}" onclick="return confirm('¿Seguro que querés borrar esta tarea?')" style="text-decoration: none;">
                         <button style="cursor: pointer; background-color: #ff4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold;">
                             🗑️ Borrar
                         </button>

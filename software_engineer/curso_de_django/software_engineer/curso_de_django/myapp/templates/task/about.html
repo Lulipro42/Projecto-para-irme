@@ -1,0 +1,36 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2 class="about-tittle">Sobre este Proyecto</h2>
+    <p class="about-descripcion">
+        Bienvenido a mi plataforma de gestión. Mi nombre es Ulises. Este proyecto nació con el objetivo de diseñar un entorno eficiente para administrar tareas y proyectos globales, aplicando buenas prácticas de desarrollo web, optimización de bases de datos y diseño adaptable.
+    </p>
+
+    <div class="stats-grid">
+        
+        <div class="stat-card">
+            <h3>💻 Backend & DB</h3>
+            <p>
+                Desarrollado con <strong>Python y Django</strong>, aprovechando su sistema de rutas, vistas basadas en funciones y un sólido ORM para la persistencia de datos de forma segura.
+            </p>
+        </div>
+
+        <div class="stat-card">
+            <h3>🎨 UI & UX Líquida</h3>
+            <p>
+                Maquetado limpio utilizando <strong>CSS Grid y Flexbox</strong>. Cuenta con un sistema dinámico de variables para soportar Modo Claro y Modo Oscuro de forma nativa.
+            </p>
+        </div>
+
+        <div class="stat-card">
+            <h3>🎯 Objetivos</h3>
+            <p>
+                Centralizar el flujo de trabajo personal, controlar estados de tareas (pendientes, completadas, vencidas) y dominar la arquitectura de software de extremo a extremo.
+            </p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
