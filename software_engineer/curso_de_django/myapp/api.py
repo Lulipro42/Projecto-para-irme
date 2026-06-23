@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from .models import Task, User  # Asumiendo que tu modelo se llama Task
-from .serializers import UserSerializer
+from .serializers import TaskSerializer,UserSerializer 
 
 
 class TaskListAPIView(APIView):
@@ -17,7 +17,7 @@ class TaskListAPIView(APIView):
         # Pasamos many=True porque 'tareas' es una lista de objetos: "Che, te voy a pasar una lista con muchos objetos, tratalos uno por uno y armame una lista de JSONs".
 
 
-        serializador = UserSerializer(tareas, many=True)
+        serializador = TaskSerializer(tareas, many=True)
         
         return Response(serializador.data, status=status.HTTP_200_OK)
     
@@ -25,7 +25,7 @@ class TaskListAPIView(APIView):
     # 📥 POST: Recibe datos en JSON desde el frontend y crea una tarea nueva
     def post(self,request):
         # request.data agarra el JSON que mande el cliente automáticamente 🔒
-        serializador = UserSerializer(data=request.data)
+        serializador = Taskerializer(data=request.data)
         # Validamos si los datos cumplen con las reglas del modelo (ej: títulos no vacíos)
         if serializador.is_valid():
             serializador.save()
@@ -41,14 +41,14 @@ class TaskDetailAPIView(APIView):
     # 👁️ GET: Trae el detalle de una sola tarea usando su ID
     def get(self, request, pk):
         tarea = get_object_or_404(Task,id=pk)
-        serializador = UserSerializer(tarea)# Sin many=True porque es una sola Osea que cuando son mas de una lista el many true los convierte en unos objetos
+        serializador = TaskSerializer(tarea)# Sin many=True porque es una sola Osea que cuando son mas de una lista el many true los convierte en unos objetos
         return Response(serializador.data, status=status.HTTP_200_OK)
     
         # 📝 PUT: Modifica o actualiza los datos de una tarea existente
     def put(self, request, pk):
         tarea = get_object_or_404(Task,id=pk)
         # Le pasamos la tarea actual y los datos nuevos que vienen en el JSON
-        serializador = UserSerializer(tarea, data=request.data)
+        serializador = TaskSerializer(tarea, data=request.data)
         
         if serializador.is_valid():
             serializador.save()

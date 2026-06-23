@@ -6,7 +6,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task  # [3] Le decimos qué modelo tiene que traducir
         # [4] Elegimos qué columnas de la base de datos queremos que viajen por internet
-        fields = ['id', 'title', 'description', 'status', 'done', 'project', 'user', 'state']
+        fields = ['id', 'title', 'description', 'status', 'project', 'user', 'state']
             
 
     def validate_title(self,value):
@@ -64,4 +64,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id','username','email']
         
 
+
+### ---- TICKETS ---- ###
 

@@ -1,7 +1,0 @@
-Java
-Python
-C#
-JavaScript
-PHP
-Kotlin
-Ruby

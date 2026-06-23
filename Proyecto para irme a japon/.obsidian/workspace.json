@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "10f1141098c983b0",
+        "id": "4fc697b3b8698aab",
         "type": "tabs",
         "children": [
           {
-            "id": "164f1ea3d892d28c",
+            "id": "d6c09d43d847ec3b",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "LOGIN CON TOKENS + SESIONES.md",
+                "file": "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/ARREGLO DE CODIO 12 22-06-2026.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "LOGIN CON TOKENS + SESIONES"
+              "title": "ARREGLO DE CODIO 12 22-06-2026"
             }
           }
         ]
@@ -40,7 +40,7 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical",
+                "sortOrder": "byModifiedTime",
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "selec",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 277.5
+    "width": 398.5
   },
   "right": {
     "id": "29810b7789baf0ab",
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Bienvenido.md",
+                "file": "CODIGO CORREGIDO 6.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Enlaces entrantes de Bienvenido"
+              "title": "Enlaces entrantes de CODIGO CORREGIDO 6"
             }
           },
           {
@@ -183,38 +183,38 @@
       "bases:Crear nueva base": false
     }
   },
-  "active": "164f1ea3d892d28c",
+  "active": "d6c09d43d847ec3b",
   "lastOpenFiles": [
-    "RESUMENES DE LOS VIDEOS DE DRF/DRF TOKEN Y JWT.md",
-    "LOGIN CON TOKENS + SESIONES.md",
-    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/Arreglo de codigo .2 este es de algo nuevo que aprendi.md",
-    "ViewSets y Routers.md",
-    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/Arreglo de codigo .1.md",
-    "Django REST FRAMEWORK/Como usar DETALLE.DELET.UPDATE,.md",
-    "Django REST FRAMEWORK/Arreglos con errores de sistemas 'huerfanos'.md",
+    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/CODIGO CORREGIDO 6.md",
+    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/ARREGLO DE CODE REVIEW 11 DEL DOMINGO 21 DEL 6.md",
+    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/ARREGLO DE CODIGO 9.md",
+    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/ARREGLOS DE CODE REVIEW 10.md",
+    "EXPLICACION DEL REGISTRAR FACTURA.md",
+    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/ARREGLO DE CODIO 12 22-06-2026.md",
+    "CONCEPTOS DE SEGURIDAD 22-06-2026.md",
+    "DIFERENCIAS ENTRE .SELECT_RELATED Y .PREFETCH_RELATED.md",
+    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/ARREGLO DE CODIGO 8.md",
+    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/CODIGO CORREGIDO 7.md",
     "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/Arreglo de codigo 5.md",
-    "RESUMENES DE LOS VIDEOS DE DRF/Lista Api View.md",
-    "RESUMENES DE LOS VIDEOS DE DRF/Create ApiView.md",
-    "RESUMENES DE LOS VIDEOS DE DRF/Formas de serializar modelos.md",
-    "Formas de serializar relaciones en modelos.md",
+    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/Arreglo de codigo .1.md",
+    "ULTIMO VIDEO DEL CURSO.md",
     "Diferencias entre request.POST.md",
-    "RESUMENES DE LOS VIDEOS DE DRF",
-    "Django REST FRAMEWORK/Funcion de EndPoint.md",
-    "2026-06-09.md",
-    "Django REST FRAMEWORK/Que es un DRY.md",
-    "Cosas de un API.md",
-    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/Arreglo de codigo .4.md",
-    "Django REST FRAMEWORK/Que es un serializer.md",
-    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca/Arreglo de codigo.3 este fue de un ticket echo el 4 del 6 del 2026.md",
-    "Django REST FRAMEWORK/Que es request.data.md",
-    "El problema del  ($N+1$) que pude resolver.md",
-    "Que cambios hay en el request vs django rest framework.md",
-    "Resumen de el 1 del 6 de 2026.md",
-    "Django REST FRAMEWORK/Como usar un RESPONSE.md",
-    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca",
-    "Django REST FRAMEWORK/Explicacion del API RESET.md",
-    "Django REST FRAMEWORK",
     "Sin título.canvas",
+    "RESUMENES DE LOS VIDEOS DE DRF/MUTABILIDAD EN REQUEST.md",
+    "COSAS A ESTUDIAR QUE ME FALTAN PARA SER TRAINEE.md",
+    "EL NUEVO METODO DE ESTUDIO HOY 17-06-2026.md",
+    "MUTABILIDAD EN REQUEST PARTE 2.md",
+    "RESUMENES DE LOS VIDEOS DE DRF/ViewSets y Routers.md",
+    "Cosas de un API.md",
+    "RESUMENES DE LOS VIDEOS DE DRF/Lista Api View.md",
+    "RESUMENES DE LOS VIDEOS DE DRF/Formas de serializar modelos.md",
+    "RESUMENES DE LOS VIDEOS DE DRF/DRF TOKEN Y JWT.md",
+    "RESUMENES DE LOS VIDEOS DE DRF/CRUD USUARIOS CON GENERICVIEWSETS.md",
+    "RESUMENES DE LOS VIDEOS DE DRF/Create ApiView.md",
+    "Parsers JSONPARSER - FORMPARSER - MULTIPARTPARSER.md",
+    "RESUMENES DE LOS VIDEOS DE DRF",
+    "Arreglos de codigo que yo hago mal y tengo que mejorar la logca",
+    "Django REST FRAMEWORK",
     "Sin título.base",
     "Sin título 1.base"
   ]

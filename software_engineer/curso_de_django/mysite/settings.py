@@ -82,10 +82,14 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sistema_proyectos',          # La base de datos que creamos recién
+        'USER': 'root',
+        'PASSWORD': 'Mami_pro42',            # 🔑 ¡Tu contraseña encontrada!
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }
 }
 
 # Password validation
