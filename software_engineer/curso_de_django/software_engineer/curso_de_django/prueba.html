@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Tiendita Tech</title>
+    <style>
+        /* Un poquito de CSS para que no sea tan feo */
+        body { font-family: sans-serif; text-align: center; padding: 50px; }
+        input { padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; background-color: #28a745; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Buscador de Precios</h1>
+    <p>Escribí el producto (pan, leche, huevo):</p>
+    
+    <input type="text" id="productoInput" placeholder="Ej: pan">
+    <button onclick="buscarPrecio()">Consultar</button>
+
+    <h2 id="resultado"></h2>
+
+    <script> 
+        async function buscarPrecio() {
+            let producto = document.getElementById('productoInput').value.toLowerCase();
+        
+        let respuesta = await fetch('https://api.mitienditatech.com/precios?producto=' + producto);
+        let data = await respuesta.json();
+
+        document.getElementById("resultado").innerText = "El precio es: $" + data.precio;
+        
+        
+        
+        }
+    </script>
+</body>
+</html>

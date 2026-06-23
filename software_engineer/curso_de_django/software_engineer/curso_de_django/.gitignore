@@ -1,0 +1,22 @@
+# Ignorar la base de datos local (SQLite) para que no viaje a internet
+db.sqlite3
+
+# Ignorar las carpetas de caché temporales de Python
+__pycache__/
+*.pyc
+
+# Ignorar archivos temporales de configuración de VS Code
+.vscode/
+
+# Ignorar archivos de variables de entorno locales (donde van las contraseñas)
+.env
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
